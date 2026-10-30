@@ -1,0 +1,6 @@
+[vite] connecting...
+[vite] connected.
+%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o
+Failed to load resource: the server responded with a status of 404 (Not Found)
+Token JWT obtenido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzkzMzU1NzYzLCJpYXQiOjE3OTMzNTM5NjMsImp0aSI6ImJhNzE5OGRmM2ZlZTRmMzRhZjEyMDgxZjE5NjA5ODU3IiwidXNlcl9pZCI6IjQifQ.mi8xMgVlc_FjscG2zdpCTLVNCpYxvzqNdZtIaDnRTHM

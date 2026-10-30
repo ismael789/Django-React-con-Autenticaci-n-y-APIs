@@ -31,13 +31,17 @@ class PersonalDataView(generics.RetrieveAPIView):
 @permission_classes([IsAuthenticated])
 def soap_country(request):
     """Consulta CountryInfoService por medio de Zeep y responde JSON."""
+    import requests
     from zeep import Client
+    from zeep.transports import Transport
     from zeep.helpers import serialize_object
 
     code = request.query_params.get('code', 'MX').upper()
-    wsdl = 'https://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL'
+    wsdl = 'http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL'
     try:
-        result = Client(wsdl=wsdl).service.FullCountryInfo(sCountryISOCode=code)
+        session = requests.Session()
+        session.trust_env = False
+        result = Client(wsdl=wsdl, transport=Transport(session=session, timeout=20)).service.FullCountryInfo(sCountryISOCode=code)
         data = serialize_object(result)
         return Response({'source': 'CountryInfoService', 'code': code, 'data': data})
     except Exception as exc:
