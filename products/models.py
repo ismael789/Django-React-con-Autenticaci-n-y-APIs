@@ -20,7 +20,7 @@ class EmailUserManager(BaseUserManager):
 class User(AbstractUser):
     """Usuario de la tienda: inicia sesión con correo electrónico."""
 
-    username = None
+    username = models.CharField('Nombre de usuario', max_length=150, unique=True, blank=True, null=True)
     email = models.EmailField('Correo electrónico', unique=True)
     carrera = models.CharField('Carrera', max_length=120, blank=True)
 

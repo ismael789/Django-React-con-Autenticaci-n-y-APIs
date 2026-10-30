@@ -1,12 +1,50 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, status
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
 from .models import Category, Product, User
 from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PersonalDataSerializer
 from .services import calcular_precio_final
+
+
+class RegisterUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+
+class PersonalDataView(generics.RetrieveAPIView):
+    serializer_class = PersonalDataSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+
+@extend_schema(
+    parameters=[OpenApiParameter(name='code', type=str, required=False, description='Codigo ISO de dos letras, por ejemplo MX')],
+    responses=OpenApiResponse(description='Datos del pais obtenidos desde CountryInfoService'),
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def soap_country(request):
+    """Consulta CountryInfoService por medio de Zeep y responde JSON."""
+    from zeep import Client
+    from zeep.helpers import serialize_object
+
+    code = request.query_params.get('code', 'MX').upper()
+    wsdl = 'https://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL'
+    try:
+        result = Client(wsdl=wsdl).service.FullCountryInfo(sCountryISOCode=code)
+        data = serialize_object(result)
+        return Response({'source': 'CountryInfoService', 'code': code, 'data': data})
+    except Exception as exc:
+        return Response(
+            {'detail': 'No fue posible consultar el servicio SOAP.', 'code': code, 'error': str(exc)},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
 
 
 class ProductViewSet(viewsets.ModelViewSet):

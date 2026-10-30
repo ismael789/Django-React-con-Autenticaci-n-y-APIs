@@ -6,3 +6,6 @@ db.sqlite3
 .env
 staticfiles/
 tmp/
+frontend/node_modules/
+frontend/dist/
+frontend/.env
