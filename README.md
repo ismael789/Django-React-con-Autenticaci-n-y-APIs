@@ -7,6 +7,7 @@ API REST de una tienda en línea desarrollada con Django REST Framework. El proy
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+cd backend
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
@@ -33,6 +34,7 @@ La documentación Swagger está disponible en `http://127.0.0.1:8000/api/swagger
 ## Pruebas
 
 ```powershell
+cd backend
 python manage.py test
 ```
 
@@ -47,6 +49,7 @@ La actividad de cierre conserva el backend de Mercado Local y agrega un frontend
 
 ```powershell
 .\venv\Scripts\Activate.ps1
+cd backend
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver 127.0.0.1:8000
